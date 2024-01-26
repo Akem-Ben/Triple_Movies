@@ -9,12 +9,12 @@ function Button(props) {
   };
   return (
     <button
-      type={props.type || 'button'} // Default type to 'button' if not specified
+      type={props.type || 'button'}
       className={`flex h-10 py-2 px-4 justify-center items-center flex-shrink-0 rounded font-Inter`}
       style={buttonStyle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={() => props.onClick && props.onClick()}// Apply the provided onClick function
+      onClick={() => props.onClick && props.onClick()}
     >
       {props.title}
     </button>
