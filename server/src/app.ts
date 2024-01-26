@@ -5,10 +5,12 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import logger from "morgan";
 import bodyParser from "body-parser";
+import movieRouter from './routes/movieRoutes'
 
 const app = express();
 
 dotenv.config();
+
 app.use(bodyParser.json());
 dotenv.config();
 app.use(bodyParser.json());
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+
+app.use("/movies", movieRouter)
 
 
 app.listen(process.env.PORT, () => {
