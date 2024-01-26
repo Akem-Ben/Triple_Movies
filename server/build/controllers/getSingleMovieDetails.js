@@ -28,4 +28,3 @@ const getSingleMovieDetails = async (request, response) => {
     }
 };
 exports.getSingleMovieDetails = getSingleMovieDetails;
-// latestSearchQueries

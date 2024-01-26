@@ -41,7 +41,9 @@ const SearchBox = (props) => {
     localStorage.removeItem('searchHistory');
   };
 
-  const handleHistoryItemClick = (item) => {
+  const handleHistoryItemClick = (event,item) => {
+    event.preventDefault()
+    console.log('helo', item)
     setSearchValue(item);
     props.onSearch(item);
   };
@@ -56,7 +58,7 @@ const SearchBox = (props) => {
   return (
     <div className='col relative'>
       <input
-        className='w-[40%] text-white rounded-tl rounded-bl p-[10px] bg-gray-700'
+        className='w-full md:w-[40%] text-white rounded-tl rounded-bl p-[10px] bg-gray-700'
         value={searchValue}
         onChange={(event) => setSearchValue(event.target.value)}
         onFocus={handleFocus}
@@ -64,16 +66,34 @@ const SearchBox = (props) => {
         onKeyPress={handleKeyPress}
         placeholder='Search movies...'
       ></input>
-      <button className='bg-[#F9C209] h-[45px] w-[10%] rounded-tr rounded-br' onClick={handleSearch}>
+      <button
+        className='md:ml-1 bg-[#F9C209] h-[45px] w-full md:w-[30%] rounded-tr rounded-br mt-2 md:mt-0'
+        onClick={handleSearch}
+      >
         Search
       </button>
-      {isFocused && searchHistory.length > 0 &&  (
-        <div className="absolute top-full left-0 bg-gray-900 bg-opacity-80 w-[50%] rounded mt-[1%] p-[8px]">
+      {isFocused && searchHistory.length > 0 && (
+        <div  onClick={(e) => e.stopPropagation()} className="absolute top-full left-0 bg-gray-900 bg-opacity-80 w-full md:w-[50%] rounded mt-1 md:mt-0 p-2" style={{ zIndex: 1000 }}>
           <ul>
             {searchHistory.map((item, index) => (
-              <li className='text-gray-300' key={index} onClick={() => handleHistoryItemClick(item)}>
+              <div className='flex p-[10px] justify-between' key={index}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = '#444')}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent')}
+                onClick={(e) => e.stopPropagation()}
+              ><li
+                className='text-gray-300 flex mb-1'
+                onClick={() => handleHistoryItemClick(item)}
+              >
                 {item}
               </li>
+              <p className='w-5 h-5 p-[3%] text-gray-300 flex justify-center items-center border rounded-full'
+                  onClick={() => {
+                    const updatedHistory = searchHistory.filter((historyItem) => historyItem !== item);
+                    setSearchHistory(updatedHistory);
+                    localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+                  }}
+              >x</p>
+              </div>
             ))}
           </ul>
         </div>

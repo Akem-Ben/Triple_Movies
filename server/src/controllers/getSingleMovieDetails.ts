@@ -25,4 +25,3 @@ export const getSingleMovieDetails = async(request:Request, response:Response) =
         })
     }
 }
-// latestSearchQueries

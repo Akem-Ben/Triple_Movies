@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import MovieListHeading from "./components/MovieListHeading";
 import Card from "./components/Cards";
-import { getFastMovies, getSingleMovieDetails, changePage } from "./axios/axios";
+import { getFastMovies, getSingleMovieDetails } from "./axios/axios";
 import { MdFavoriteBorder } from "react-icons/md";
 import { MdOutlineFavorite } from "react-icons/md";
 import Modal from "./components/Modal";
@@ -34,7 +34,7 @@ const App = () => {
       });
       const response = await getFastMovies(filters.title, 1);
 	  console.log(response)
-      return setFastMovies(response.data.data);
+      return setFastMovies(response.data.data.Search);
     } catch (error) {
       console.log(error.message);
     }
@@ -47,7 +47,7 @@ const App = () => {
   const home = async () => {
     try {
       const response = await getFastMovies("fast");
-      return setFastMovies(response.data.data);
+      return setFastMovies(response.data.data.Search);
     } catch (error) {
       console.log(error);
     }
@@ -57,9 +57,8 @@ const App = () => {
     try {
       const nextPage = filters.page + 1;
       setFilters({ ...filters, page: nextPage });
-      const response = await changePage(filters.title, nextPage);
-	  console.log('fil',response);
-      return setFastMovies(response.data.data);
+      const response = await getFastMovies(filters.title, nextPage);
+      return setFastMovies(response.data.data.Search);
     } catch (error) {
       console.log(error);
     }
@@ -69,11 +68,10 @@ const App = () => {
       if (filters.page === 1) {
         return null;
       }
-      const nextPage = filters.page - 1;
-      setFilters({ ...filters, page: nextPage });
-      const response = await changePage(filters.title, nextPage);
-	  console.log(response)
-      return setFastMovies(response.data.data);
+      const previousPage = filters.page - 1;
+      setFilters({ ...filters, page: previousPage });
+      const response = await getFastMovies(filters.title, previousPage);
+      return setFastMovies(response.data.data.Search);
     } catch (error) {
       console.log(error);
     }
@@ -83,6 +81,7 @@ const App = () => {
       setShowModal(true);
       setLoading(true);
       const details = await getSingleMovieDetails(id);
+	  console.log('det',details)
       setMovieDetails(details.data.data);
       return setLoading(false);
     } catch (error) {
@@ -103,7 +102,6 @@ const App = () => {
   };
 
   const addFavouriteMovie = (movie) => {
-    console.log("fav");
     if (favourites.includes(movie)) {
       return null;
     }
@@ -134,10 +132,9 @@ const App = () => {
   const searchMovies = async (searchValue) => {
     try {
 		setShowLoadingModal(true)
-		// console.log('yes')
       const response = await getFastMovies(searchValue);
 	  console.log('res', response)
-      setFastMovies(response.data.data);
+      setFastMovies(response.data.data.Search);
 	//   setSearchHistory((prevHistory) => {
 	// 	const newHistory = [searchValue, ...prevHistory.slice(0, 4)];
 	// 	return Array.from(new Set(newHistory));
@@ -155,101 +152,100 @@ const App = () => {
           <MovieListHeading heading="JMovies" onSearch={searchMovies} />
         </a>
       </div>
-      <div className="flex gap-[0] p-[1%] justify-between h-[100%]">
-        <div className="flex">
-          {filters.page > 1 ? (
-            <div className="flex mr-[2%] pt-[29%] justify-around">
-              <button
-                className="text-[#F9C209] flex gap-1"
-                onClick={showPreviousPage}
-              >
-                <GrCaretPrevious className="mt-[5%]" />
-              </button>
-            </div>
-          ) : null}
-          <div className="w-[100%] flex">
-            {fastMovies && fastMovies.length > 0 ? (
+      <div className="flex gap-[0] mt-[1%] justify-between h-[100%]">
+	  <div className="flex md:w-full  p-[1%] md:flex-row">
+
+  {filters.page > 1 && (
+    <div className="relative h-full flex justify-center items-center">
+      <button
+        className="text-[#F9C209]"
+        onClick={showPreviousPage}
+      >
+        <GrCaretPrevious className="mt-[5%]" />
+      </button>
+    </div>
+  )}
+  <div className="w-full md:w-[100%] ml-[4%] s:mr-[0%] flex flex-wrap gap-2 h-auto md:h-[100%]">
+    {fastMovies && fastMovies.length > 0 ? (
+      fastMovies?.map((movie, index) => (
+        <div className="mb-[15px]" key={index}>
+          <Card
+            id={movie.imdbID}
+            image={movie.Poster}
+            onClick={() => modalShow(movie.imdbID)}
+          />
+          <div className="flex justify-between">
+            {favourites.includes(movie) ? (
               <>
-                <div className="flex-wrap flex gap-4 h-[100%]">
-                  {fastMovies?.map((movie, index) => (
-                    <div className="mb-[15px]" key={index}>
-                      <Card
-                        id={movie.imdbID}
-                        image={movie.poster}
-                        onClick={() => modalShow(movie.imdbID)}
-                      />
-                      <div className="flex justify-between">
-                        {favourites.includes(movie) ? (
-                          <>
-                            <button onClick={() => removeFavouriteMovie(movie)}>
-                              <MdOutlineFavorite className="text-[gold]" />
-                            </button>
-                            <p className="text-[#858585]">{movie.type}</p>
-                            <p className="text-[#858585]">{movie.year}</p>
-                          </>
-                        ) : (
-                          <>
-                            <button onClick={() => addFavouriteMovie(movie)}>
-                              <MdFavoriteBorder className="text-[#858585]" />
-                            </button>
-                            <p className="text-[#858585]">{movie.type}</p>
-                            <p className="text-[#858585]">{movie.year}</p>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="pt-[29%] mr-[1%]">
-                  <button
-                    className="text-[#F9C209] flex gap-1"
-                    onClick={showNextPage}
-                  >
-                    <GrCaretNext className="mt-[8%]" />
-                  </button>
-                </div>
+                <button onClick={() => removeFavouriteMovie(movie)}>
+                  <MdOutlineFavorite className="text-[gold]" />
+                </button>
+                <p className="text-[#858585]">{movie.Type}</p>
+                <p className="text-[#858585]">{movie.Year}</p>
               </>
             ) : (
-              <p className="w-[100%] pr-[900px] bg-yellow-599 text-[#F9C209]">
-                No Movie Found with that title
-              </p>
+              <>
+                <button onClick={() => addFavouriteMovie(movie)}>
+                  <MdFavoriteBorder className="text-[#858585]" />
+                </button>
+                <p className="text-[#858585]">{movie.Type}</p>
+                <p className="text-[#858585]">{movie.Year}</p>
+              </>
             )}
           </div>
         </div>
-        <div className="w-[25%] h-[100%] flex gap-[10px] justify-center mr-[1%]">
+      ))
+    ) : (
+      <p className="w-full md:pr-[900px] bg-yellow-599 text-[#F9C209]">
+        No Movie Found with that title
+      </p>
+    )}
+  </div>
+<div className="relative h-full flex justify-center items-center">
+  <button
+    className="text-[#F9C209]"
+    onClick={showNextPage}
+  >
+    <GrCaretNext className="" />
+  </button>
+</div>
+</div>
+
           <div className="w-1 bg-[#F9C209]"></div>
-          <div className="flex flex-col items-center h-[700px] overflow-y-scroll w-[100%]">
-            <p className="mb-[5%] text-[#858585] font-bold">
-              <strong className="font-semibold">FAVOURITES</strong>
-            </p>
-            <div>
-              {favourites.length !== 0 ? (
-                favourites.map((movie, index) => (
-                  <div className="mb-[15px]" key={index}>
-                    <Card
-                      id={movie.imdbID}
-                      image={movie.poster}
-                      onClick={() => modalShow(movie.imdbID)}
-                    />
-                    <div className="flex justify-between">
-                      <button onClick={() => removeFavouriteMovie(movie)}>
-                        <MdOutlineFavorite className="text-[gold]" />
-                      </button>
-                      <p className="text-[#858585]">{movie.type}</p>
-                      <p className="text-[#858585]">{movie.year}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>
-                  <strong className="text-[#858585] font-bold">
-                    No movies Added Yet
-                  </strong>
-                </p>
-              )}
+		  <div className="w-full md:w-[25%] h-[100%] flex gap-2 md:justify-center md:mr-[1%]">
+  <div className="flex flex-col items-center h-[100%] md:h-[700px] overflow-y-scroll w-full">
+    <p className="mb-2 md:mb-5 text-[#858585] font-bold">
+      <strong className="font-semibold">FAVOURITES</strong>
+    </p>
+    <div>
+      {favourites.length !== 0 ? (
+        favourites.map((movie, index) => (
+          <div className="mb-2 md:mb-[15px]" key={index}>
+            <Card
+              id={movie.imdbID}
+              image={movie.Poster}
+              onClick={() => modalShow(movie.imdbID)}
+            />
+            <div className="flex flex-col md:flex-row justify-between">
+              <button onClick={() => removeFavouriteMovie(movie)}>
+                <MdOutlineFavorite className="text-[gold]" />
+              </button>
+              <p className="text-[#858585] md:ml-2">{movie.Type}</p>
+              <p className="text-[#858585] md:ml-2">{movie.Year}</p>
             </div>
           </div>
-        </div>
+        ))
+      ) : (
+        <p>
+          <strong className="text-[#858585] font-bold">
+            No movies Added Yet
+          </strong>
+        </p>
+      )}
+    </div>
+  </div>
+</div>
+
       </div>
 
       {showModal && (
@@ -260,19 +256,19 @@ const App = () => {
             <>
               <div className="p-[5px] flex w-full gap-6 h-[90%] overflow-y-scroll mb-[10px]">
                 <div>
-                  <img src={movieDetails.poster} />
+                  <img src={movieDetails.Poster} />
                 </div>
                 <div className="overflow-y-scroll text-[#858585] flex flex-col gap-4 overflow-x-auto whitespace-wrap h-[430px] w-[50%]">
                   <p>
                     Title:{" "}
-                    <span className="text-white">{movieDetails.title}</span>
+                    <span className="text-white">{movieDetails.Title}</span>
                   </p>
-                  <p>Year: {movieDetails.year}</p>
-                  <p>Released: {movieDetails.released}</p>
-                  <p>Duration: {movieDetails.runtime}</p>
-                  <p>Genre: {movieDetails.genre}</p>
-                  <p>Rated: {movieDetails.rated}</p>
-                  <p>Plot: {movieDetails.plot}</p>
+                  <p>Year: {movieDetails.Year}</p>
+                  <p>Released: {movieDetails.Released}</p>
+                  <p>Duration: {movieDetails.Duration}</p>
+                  <p>Genre: {movieDetails.Genre}</p>
+                  <p>Rated: {movieDetails.Rated}</p>
+                  <p>Plot: {movieDetails.Plot}</p>
                   <p>
                     <span className="text-[#F9C209]">
                       IMDB Rating: {movieDetails.imdbRating}
@@ -292,7 +288,5 @@ const App = () => {
     </div>
   );
 };
-
-//text-[#F9C209]
 
 export default App;
