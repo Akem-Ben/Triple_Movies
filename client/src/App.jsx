@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import MovieListHeading from "./components/MovieListHeading";
 import Card from "./components/Cards";
-import { getFastMovies, getSingleMovieDetails } from "./axios/axios";
+import { getFastMovies, getSingleMovieDetails, changePage } from "./axios/axios";
 import { MdFavoriteBorder } from "react-icons/md";
 import { MdOutlineFavorite } from "react-icons/md";
 import Modal from "./components/Modal";
@@ -33,7 +33,8 @@ const App = () => {
         page: 1,
       });
       const response = await getFastMovies(filters.title, 1);
-      return setFastMovies(response.data.data.Search);
+	  console.log(response)
+      return setFastMovies(response.data.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -45,12 +46,8 @@ const App = () => {
 
   const home = async () => {
     try {
-      setFilters({
-        title: "fast",
-        page: 1,
-      });
-      const response = await getFastMovies("fast", 1);
-      return setFastMovies(response.data.data.Search);
+      const response = await getFastMovies("fast");
+      return setFastMovies(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -58,26 +55,25 @@ const App = () => {
 
   const showNextPage = async () => {
     try {
-      console.log(filters);
       const nextPage = filters.page + 1;
       setFilters({ ...filters, page: nextPage });
-      const response = await getFastMovies(filters.title, nextPage);
-      return setFastMovies(response.data.data.Search);
+      const response = await changePage(filters.title, nextPage);
+	  console.log('fil',response);
+      return setFastMovies(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
   const showPreviousPage = async () => {
     try {
-      console.log(filters);
       if (filters.page === 1) {
         return null;
       }
       const nextPage = filters.page - 1;
       setFilters({ ...filters, page: nextPage });
-      console.log(filters);
-      const response = await getFastMovies(filters.title, nextPage);
-      return setFastMovies(response.data.data.Search);
+      const response = await changePage(filters.title, nextPage);
+	  console.log(response)
+      return setFastMovies(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -138,12 +134,10 @@ const App = () => {
   const searchMovies = async (searchValue) => {
     try {
 		setShowLoadingModal(true)
-      setFilters({
-        title: searchValue,
-        page: 1,
-      });
-      const response = await getFastMovies(searchValue, 1);
-      setFastMovies(response.data.data.Search);
+		// console.log('yes')
+      const response = await getFastMovies(searchValue);
+	  console.log('res', response)
+      setFastMovies(response.data.data);
 	//   setSearchHistory((prevHistory) => {
 	// 	const newHistory = [searchValue, ...prevHistory.slice(0, 4)];
 	// 	return Array.from(new Set(newHistory));
@@ -181,7 +175,7 @@ const App = () => {
                     <div className="mb-[15px]" key={index}>
                       <Card
                         id={movie.imdbID}
-                        image={movie.Poster}
+                        image={movie.poster}
                         onClick={() => modalShow(movie.imdbID)}
                       />
                       <div className="flex justify-between">
@@ -190,16 +184,16 @@ const App = () => {
                             <button onClick={() => removeFavouriteMovie(movie)}>
                               <MdOutlineFavorite className="text-[gold]" />
                             </button>
-                            <p className="text-[#858585]">{movie.Type}</p>
-                            <p className="text-[#858585]">{movie.Year}</p>
+                            <p className="text-[#858585]">{movie.type}</p>
+                            <p className="text-[#858585]">{movie.year}</p>
                           </>
                         ) : (
                           <>
                             <button onClick={() => addFavouriteMovie(movie)}>
                               <MdFavoriteBorder className="text-[#858585]" />
                             </button>
-                            <p className="text-[#858585]">{movie.Type}</p>
-                            <p className="text-[#858585]">{movie.Year}</p>
+                            <p className="text-[#858585]">{movie.type}</p>
+                            <p className="text-[#858585]">{movie.year}</p>
                           </>
                         )}
                       </div>
@@ -234,15 +228,15 @@ const App = () => {
                   <div className="mb-[15px]" key={index}>
                     <Card
                       id={movie.imdbID}
-                      image={movie.Poster}
+                      image={movie.poster}
                       onClick={() => modalShow(movie.imdbID)}
                     />
                     <div className="flex justify-between">
                       <button onClick={() => removeFavouriteMovie(movie)}>
                         <MdOutlineFavorite className="text-[gold]" />
                       </button>
-                      <p className="text-[#858585]">{movie.Type}</p>
-                      <p className="text-[#858585]">{movie.Year}</p>
+                      <p className="text-[#858585]">{movie.type}</p>
+                      <p className="text-[#858585]">{movie.year}</p>
                     </div>
                   </div>
                 ))
@@ -266,19 +260,19 @@ const App = () => {
             <>
               <div className="p-[5px] flex w-full gap-6 h-[90%] overflow-y-scroll mb-[10px]">
                 <div>
-                  <img src={movieDetails.Poster} />
+                  <img src={movieDetails.poster} />
                 </div>
                 <div className="overflow-y-scroll text-[#858585] flex flex-col gap-4 overflow-x-auto whitespace-wrap h-[430px] w-[50%]">
                   <p>
                     Title:{" "}
-                    <span className="text-white">{movieDetails.Title}</span>
+                    <span className="text-white">{movieDetails.title}</span>
                   </p>
-                  <p>Year: {movieDetails.Year}</p>
-                  <p>Released: {movieDetails.Released}</p>
-                  <p>Duration: {movieDetails.Runtime}</p>
-                  <p>Genre: {movieDetails.Genre}</p>
-                  <p>Rated: {movieDetails.Rated}</p>
-                  <p>Plot: {movieDetails.Plot}</p>
+                  <p>Year: {movieDetails.year}</p>
+                  <p>Released: {movieDetails.released}</p>
+                  <p>Duration: {movieDetails.runtime}</p>
+                  <p>Genre: {movieDetails.genre}</p>
+                  <p>Rated: {movieDetails.rated}</p>
+                  <p>Plot: {movieDetails.plot}</p>
                   <p>
                     <span className="text-[#F9C209]">
                       IMDB Rating: {movieDetails.imdbRating}
