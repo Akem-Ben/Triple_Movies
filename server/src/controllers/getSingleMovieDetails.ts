@@ -3,7 +3,7 @@ import { fetchSingleMovieDetails } from '../helpers/helpers';
 
 export const getSingleMovieDetails = async(request:Request, response:Response) => {
     try{
-        const {code} = request.body
+        const {code} = request.query
         const data = await fetchSingleMovieDetails(code)
         if(!data){
             return response.status(400).json({

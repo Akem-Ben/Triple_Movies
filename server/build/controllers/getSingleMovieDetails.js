@@ -4,7 +4,7 @@ exports.getSingleMovieDetails = void 0;
 const helpers_1 = require("../helpers/helpers");
 const getSingleMovieDetails = async (request, response) => {
     try {
-        const { code } = request.body;
+        const { code } = request.query;
         const data = await (0, helpers_1.fetchSingleMovieDetails)(code);
         if (!data) {
             return response.status(400).json({

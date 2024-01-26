@@ -9,9 +9,9 @@ export const getFastMovies = async(title, page)=>{
   }
 }
 
-export const getToNextPage = async(name)=>{
+export const getSingleMovieDetails = async(code)=>{
     try {
-      const response = await axios.get("movies/next_page", name);
+      const response = await axios.get(`movies/single_movie?code=${code}`);
       return response;
     } catch (err) {
       return err.response;

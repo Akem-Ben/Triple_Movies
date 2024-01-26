@@ -3,11 +3,6 @@ import Button from './Button'
 
 function Card(props) {
   const [isHovered, setIsHovered] = useState(false);
-//   const [showModal, setShowModal] = useState(false);
-
-  const handleEventPage = (id, eventDetails) => {
-    console.log("Handle event page:", id, eventDetails);
-  };
   return (
     <div
       className={`relative w-[200px] mb-[10px] h-[200px] pt-[282px] rounded-md flex-col justify-end items-center flex bg-cover bg-center transition-all duration-100 delay-200 z-20`}
@@ -24,9 +19,9 @@ function Card(props) {
             <Button
               title={"Details"}
               text={"white"}
-              bg={"#040E1E"}
+              bg={"#F9C209"}
               type={"submit"}
-              onClick={() => props.onClick && props.onClick()}
+              onClick={() => props.onClick && props.onClick(props.id)}
             />
           </div>
         </div>
