@@ -51,7 +51,7 @@ const App = () => {
 			title: "fast",
 			page: 1
 		  });
-		  const response = await getFastMovies(filters.title, filters.page);
+		  const response = await getFastMovies("fast", 1);
 		  return setFastMovies(response.data.data.Search);
 		} catch (error) {
 		  console.log(error);
