@@ -1,6 +1,5 @@
 // Modal.tsx
 import React from 'react';
-import Button from '../components/Button';
 
 export const NotificationModal = ({ onClose, children, buttons }) => {
   return (
