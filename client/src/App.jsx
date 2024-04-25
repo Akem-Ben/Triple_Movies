@@ -18,8 +18,6 @@ const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
-//   const [searchHistory, setSearchHistory] = useState([]);
-
 
   const [filters, setFilters] = useState({
     title: "fast",
@@ -135,10 +133,6 @@ const App = () => {
       const response = await getFastMovies(searchValue);
 	  console.log('res', response)
       setFastMovies(response.data.data.Search);
-	//   setSearchHistory((prevHistory) => {
-	// 	const newHistory = [searchValue, ...prevHistory.slice(0, 4)];
-	// 	return Array.from(new Set(newHistory));
-	//   });
 	  return setShowLoadingModal(false)
     } catch (error) {
       console.log(error);
@@ -149,7 +143,7 @@ const App = () => {
     <div>
       <div className="sticky top-0 z-50">
         <a href="#" className="text-decoration-none" onClick={home}>
-          <MovieListHeading heading="JMovies" onSearch={searchMovies} />
+          <MovieListHeading heading="TRMovies" onSearch={searchMovies} />
         </a>
       </div>
       <div className="flex gap-[0] mt-[1%] justify-between h-[100%]">

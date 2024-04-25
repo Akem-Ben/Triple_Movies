@@ -24,11 +24,8 @@ export const getSingleMovieDetails = async(code)=>{
     try {
       const response = await axios.get(`movies/single_movie?code=${code}`);
       // const response = await axios.get(`/api/movies/${code}`)
-      console.log('res', response)
       return response;
     } catch (err) {
       return err.response;
     }
 }
-
-// /api/movies/Search/{title}
