@@ -1,15 +1,9 @@
-import {Request, Response} from 'express';
-import { fetchSearchedMovies } from '../helpers/helpers';
+import { fetchSingleMovieDetails } from '../helpers/helpers.js';
 
-export const getSearchedMovies = async(request:Request, response:Response) => {
+export const getSingleMovieDetails = async(request, response) => {
     try{
-        const { title, page } = request.query;
-        let data;
-        if(page){
-           data = await fetchSearchedMovies(title, page)
-        }else{
-           data = await fetchSearchedMovies(title)
-        }
+        const {code} = request.query
+        const data = await fetchSingleMovieDetails(code)
         if(!data){
             return response.status(400).json({
                 status: `error`,
@@ -21,7 +15,7 @@ export const getSearchedMovies = async(request:Request, response:Response) => {
             message: `Movie successfully fetched`,
             data
         })
-    }catch(error:any){
+    }catch(error){
         console.log(error.message)
         return response.status(500).json({
             status: `error`,

@@ -1,11 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import { HttpError } from "http-errors";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import logger from "morgan";
 import bodyParser from "body-parser";
-import movieRouter from './routes/movieRoutes'
+import movieRouter from './routes/movieRoutes.js'
 
 const app = express();
 

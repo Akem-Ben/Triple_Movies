@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config()
 
-export const fetchSearchedMovies = async(title: any, page?:any)=>{
+export const fetchSearchedMovies = async (title, page) =>{
     if(!page){
         page = 1
     }
@@ -11,7 +11,7 @@ export const fetchSearchedMovies = async(title: any, page?:any)=>{
     return movies.data
 }
 
-export const fetchSingleMovieDetails = async(imdb_code: any)=>{
+export const fetchSingleMovieDetails = async(imdb_code)=>{
     const movies = await axios.get(`http://www.omdbapi.com/?i=${imdb_code}&apikey=${process.env.API_KEY}`)
     return movies.data
 }

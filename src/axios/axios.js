@@ -22,7 +22,7 @@ export const getFastMovies = async(title, page)=>{
 
 export const getSingleMovieDetails = async(code)=>{
     try {
-      const response = await axios.get(`movies/single_movie?code=${code}`);
+      const response = await axios.get(`/movies/single_movie?code=${code}`);
       // const response = await axios.get(`/api/movies/${code}`)
       return response;
     } catch (err) {

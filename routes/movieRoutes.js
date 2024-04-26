@@ -1,6 +1,6 @@
 import express from "express";
-import { getSearchedMovies } from "../controllers/getSearchedMovies";
-import { getSingleMovieDetails } from "../controllers/getSingleMovieDetails";
+import { getSearchedMovies } from "../controllers/getSearchedMovies.js";
+import { getSingleMovieDetails } from "../controllers/getSingleMovieDetails.js";
 // import { getFast } from "../controllers/getFast";
 
 
