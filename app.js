@@ -14,11 +14,17 @@ app.use(bodyParser.json());
 dotenv.config();
 app.use(bodyParser.json());
 
+const corsOptions = {
+  origin: 'https://main--triple-movies.netlify.app'
+};
+
+app.use(cors(corsOptions));
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+// app.use(cors());
 
 app.use("/movies", movieRouter)
 

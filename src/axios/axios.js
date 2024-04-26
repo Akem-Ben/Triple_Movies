@@ -3,7 +3,7 @@ import axios from './axiosSettings';
 export const getFastMovies = async(title, page)=>{
   try {
       // const response = await axios.get(`/api/movies/Search/${title}`);
-    const response = await axios.get(`movies/searched?title=${title}&page=${page}`);
+    const response = await axios.get(`/movies/searched?title=${title}&page=${page}`);
     return response;
   } catch (err) {
     return err.response;
