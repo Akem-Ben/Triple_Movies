@@ -11,5 +11,6 @@ const axios = axioz.create({
 });
 
 //'http://localhost:3030/'
+//https://main--triple-movies.netlify.app/
 
 export default axios;
