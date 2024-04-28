@@ -7,12 +7,12 @@ export const fetchSearchedMovies = async (title, page) =>{
     if(!page){
         page = 1
     }
-    const movies = await axios.get(`http://www.omdbapi.com/?s=${title}&apikey=${process.env.API_KEY}&page=${page}`)
+    const movies = await axios.get(`http://www.omdbapi.com/?s=${title}&apikey=d77386b0&page=${page}`)
     return movies.data
 }
 
 export const fetchSingleMovieDetails = async(imdb_code)=>{
-    const movies = await axios.get(`http://www.omdbapi.com/?i=${imdb_code}&apikey=${process.env.API_KEY}`)
+    const movies = await axios.get(`http://www.omdbapi.com/?i=${imdb_code}&apikey=d77386b0`)
     return movies.data
 }
 
