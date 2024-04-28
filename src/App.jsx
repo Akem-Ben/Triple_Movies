@@ -209,7 +209,7 @@ const App = () => {
 		  <div className="w-full md:w-[25%] h-[100%] flex gap-2 md:justify-center md:mr-[1%]">
   <div className="flex flex-col items-center h-[100%] md:h-[700px] overflow-y-scroll w-full">
     <p className="mb-2 md:mb-5 text-[#858585] font-bold flex justify-center items-center">
-      <strong className="font-semibold">FAVOURITES</strong> (click on <span className="m-[5px]"><MdFavoriteBorder className="text-[#858585]" /></span> to add)
+      <strong className="font-semibold">FAVOURITES</strong> (click <span className="m-[5px]"><MdFavoriteBorder className="text-[#858585]" /></span> to add)
     </p>
     <div>
       {favourites.length !== 0 ? (

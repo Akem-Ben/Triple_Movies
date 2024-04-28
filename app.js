@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 //   origin: 'https://main--triple-movies.netlify.app'
 // };
 
-// app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(logger("dev"));
 app.use(express.json());
