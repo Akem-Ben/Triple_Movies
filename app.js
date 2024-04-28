@@ -15,7 +15,7 @@ dotenv.config();
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: 'https://triple-movies.netlify.app',
+  origin: '*',
   credentials: true,
 };
 
