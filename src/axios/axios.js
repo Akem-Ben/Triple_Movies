@@ -5,8 +5,8 @@ export const getFastMovies = async(title, page)=>{
       // const response = await axios.get(`/api/movies/Search/${title}`);
     const response = await axios.get(`/movies/searched?title=${title}&page=${page}`,{
       headers: {
-        'Content-Type': 'application',
-        'Accept': 'application',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
       }
     });
     return response;
